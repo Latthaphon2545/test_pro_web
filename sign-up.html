@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap"/> <!--Font: Nunito-->
+    <title>Sign-up page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  <!--เผื่อใครงง this line makes the webpage responsive and adapt to the screen size of the device they are viewed on naja-->
+    <link rel="stylesheet" type="text/css" href="styles/sign-up.css" />
+  </head>
+
+  <body>
+    <div class="container">
+        <!--Sign up page-->
+        <div class="form-container">
+            <h2>Sign up</h2>
+
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit">Signup</button>
+
+                <div class="bottom-form">
+                    <div class="have-account">Already have an account?</div>
+                    <a href="#" class="login"> Login</a> <!--ทำให้ไปหน้า login-->
+                </div>
+            </form>
+
+        <!--Login page-->
+        <div class="form-container" id="login-container" style="display: none;">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+  </body>
+</html>
