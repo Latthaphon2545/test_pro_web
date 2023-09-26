@@ -57,8 +57,10 @@ function send_take_dinein(){
 
     if(input_name[0].value != ""){
         console.log(input_name[0].value);
+        window.location.href = "menu.html";
     }
     if(input_table[0].value != ""){
         console.log(input_table[0].value);
+        window.location.href = "menu.html";
     }
 }

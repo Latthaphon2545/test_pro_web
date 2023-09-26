@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main POS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="styles/pos.css" />
+  </head>
+  <body>
+    <div class="top-container">
+      <h1>Restaurant's name</h1>
+      <!--search bar-->
+      <div class="search-bar">
+        <input
+          type="text"
+          class="type-search"
+          placeholder="SEARCH"
+          onkeyup="searchsomething(this)"
+          id="tet_search"
+        />
+      </div>
+      <!--search bar-->
+
+      <!--open/close button-->
+      <div
+        class="open-close"
+        id="open-close-button"
+        onclick="toggleButtonColor(this)"
+      >
+        <span id="button-text">Open</span>
+      </div>
+      <!--open/close button-->
+    </div>
+
+    <div class="main-container">
+      <!-- category -->
+      <nav class="category">
+        <div class="nav-content">
+          <ul>
+            <li><a onclick="searchproduct('all')" href="#">All</a></li>
+            <li>
+              <a onclick="searchproduct('stir-fry')" href="#">Stir-fry</a>
+            </li>
+            <li><a onclick="searchproduct('curry')" href="#">Curry</a></li>
+            <li>
+              <a onclick="searchproduct('spicy-salad')" href="#">Spicy-salad</a>
+            </li>
+            <li><a onclick="searchproduct('soup')" href="#">Soup</a></li>
+            <li><a onclick="searchproduct('drinks')" href="#">Drinks</a></li>
+            <li><a onclick="searchproduct('fry')" href="#">Fry</a></li>
+            <li><a onclick="searchproduct('snacks')" href="#">Snacks</a></li>
+            <li><a onclick="searchproduct('dessert')" href="#">Dessert</a></li>
+            <li><a onclick="searchproduct('other')" href="#">Other</a></li>
+          </ul>
+          <button class="edit-button" onclick="editMenu()">Edit</button>
+        </div>
+      </nav>
+      <!-- category -->
+
+      <!--menu-->
+      <div class="menu-container" id="productlist">
+        <div class="menu-items">
+          <img
+            class="menu-img"
+            src="images/Thai-Omelette-HP-191008.jpg"
+            alt="omelette"
+          />
+          <p style="font-size: 3vw">Omelette</p>
+          <div class="price">
+            <p style="font-size: 2.5vw">50</p>
+          </div>
+        </div>
+        <div class="menu-items">
+          <img class="menu-img" src="images/fried-chicken.jpg" alt="chicken" />
+          <p style="font-size: 3vw">Fried Chicken</p>
+          <div class="price">
+            <p style="font-size: 2.5vw">60</p>
+          </div>
+        </div>
+        <div class="menu-items">
+          <img
+            class="menu-img"
+            src="images/stir-fry-with-curry.jpg"
+            alt="curry"
+          />
+          <p style="font-size: 3vw">Stir-fry Curry</p>
+          <div class="price">
+            <p style="font-size: 2.5vw">70</p>
+          </div>
+        </div>
+      </div>
+      <!--menu-->
+    </div>
+
+    <div class="footer">
+      <!-- home page icon -->
+      <a href="#">
+        <i class="fas fa-home" style="color: #000000"></i>
+      </a>
+      <!-- order-sum icon -->
+      <a href="#">
+        <i class="fas fa-list" style="color: #000000"></i>
+      </a>
+      <!-- setting icon -->
+      <a href="#">
+        <i class="fas fa-cog" style="color: #000000"></i>
+      </a>
+    </div>
+  </body>
+
+  <script>
+    function toggleButtonColor(button) {
+      let buttonText = document.getElementById("button-text");
+      if (button.style.backgroundColor === "red") {
+        button.style.backgroundColor = "green";
+        buttonText.innerHTML = "Open";
+      } else {
+        button.style.backgroundColor = "red";
+        buttonText.innerHTML = "Close";
+      }
+    }
+  </script>
+</html>

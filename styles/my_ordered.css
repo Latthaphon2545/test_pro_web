@@ -39,7 +39,17 @@ h1{
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     box-shadow: #85838a 2.5px 2.5px 5px;
-  }
+}
+
+.total-container{
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 85px 20px;
+}
 
 .send{
     background-color: #ea5b1e;
@@ -75,3 +85,7 @@ h1{
     justify-content: center;
     align-items: center;
 }
+.second-line{
+    display: flex;
+}
+

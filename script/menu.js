@@ -5,7 +5,7 @@ const product = [
     name: 'Omelet',
     price: 50,
     type: 'fry',
-    AddOn: ['Egg', 'Onion', 'Tomato', 'Chili', 'Salt', 'Pepper']
+    AddOn: ['Egg', 'Onion', 'Tomato', 'Chili', 'Salt', 'Pepper', 'Rice']
   },
   {
     id: 2,
@@ -153,6 +153,7 @@ function closefooddetail() {
 var cart = [];
 function addtocart(){
   // console.log("add to cart")
+  alert("Add to cart success");
   var pass = true;
     for (let i = 0; i < cart.length; i++) {
         if( productindex == cart[i].index ) {
@@ -252,4 +253,9 @@ function deinitems(action, index) {
       $("#countitems"+index).text(cart[index].count)
   }
   rendercart();
+}
+
+function sent_1(){
+  alert("Thank you for your order");
+  window.location.href = "take_or_dine.html";
 }

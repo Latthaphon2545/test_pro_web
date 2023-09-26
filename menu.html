@@ -32,6 +32,9 @@
         <div class="my-order-text">
           <p>My Order</p>
         </div>
+        <div class="customer-info">
+          <p id="customer-name" style="font-size: 10px;">No. 2</p>
+        </div>
       </div>
     </div>
     <!--my order-->
@@ -57,7 +60,7 @@
 
     <!--menu-->
     <div class="menu-container" id="productlist">
-      <!-- In JS -->
+      
     </div>
     <!--menu-->
 
@@ -83,7 +86,7 @@
           <input id="addnote" type="text">
         </div> -->
         <div class="button-box">
-            <button id="place-order" onclick="addtocart()">Place Order</button>
+            <button class="button-box" id="place-order" onclick="addtocart()">Place Order</button> 
         </div>
     </div>
     <!-- detail -->
@@ -106,11 +109,19 @@
           <div id="mylist">
             <!-- JS -->
           </div>
-      </div>
-      <div class="pay-container">
+      <div class="total-container">
+          <div class="total">
+              <h2>TOTAL</h2>
+          </div>
+          <div class="total-price">
+              <h2>120.00</h2>
+          </div>
+        </div>
+      <div class="pay-container" onclick="sent_1()">
           <h1 class="send">Send</h1>
       </div>
     </div>
     <!-- cart -->
+    <!-- Game -->
   </body>
 </html>

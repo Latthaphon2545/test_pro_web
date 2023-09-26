@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+
+* {
+  margin: 3px;
+  padding: 1px;
+  font-family: "Nunito", sans-serif;
+}
+
+.top-container {
+  position: sticky;
+  top: 0; 
+  z-index: 100;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 5vw;
+  font-weight: 700;
+  color: #ea5b1e;
+}
+
+/* ส่วนของ search bar */
+.search-bar {
+  display: flex;
+  width: 50%;
+  padding: 10px;
+}
+
+.type-search {
+  font-size: 2.2vw;
+  padding: 10px;
+  border: none;
+  width: 100%;
+  outline: none;
+  border-radius: 35px;
+  background-color: #d9d9d9;
+  transition: 0.3s;
+}
+
+.type-search:focus {
+  border: 1px solid #ea5b1e;
+}
+
+/* ส่วนของ cart */
+.my-order {
+  align-items: center;
+}
+
+.nav-cart {
+  position: relative;
+}
+
+.item-count {
+  position: absolute;
+  top: -13px;
+  right: 0px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ea5b1e;
+  color: white;
+}
+
+.nav-cart i {
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.my-order-text {
+  font-size: 2vw;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ส่วนของ category */
+nav.category {
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+}
+
+.nav-content {
+  display: flex;
+  overflow-x: auto;
+  gap: 2rem;
+  padding: 0;
+}
+
+nav ul {
+  transition: all 0.4s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 15px;
+  white-space: nowrap;
+  transition: all 200ms;
+}
+
+nav ul li a:hover {
+  color: #ea5b1e;
+  border-bottom: 1px solid #ea5b1e;
+}
+
+nav ul li a.active {
+  color: #ea5b1e;
+  border-bottom: 1px solid #ea5b1e;
+}
+
+/* ส่วนของเมนู */
+.menu-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.menu-items {
+  font-size: 20px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: auto;
+}
+
+.menu-img{
+  width: 100%;
+  height: 60%;
+  object-fit: cover;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  box-shadow: #85838a 4px 4px 10px;
+}
+
+.price {
+  font-weight: 900;
+  color: #ea5b1e;
+}
+
+  /* hover animation */
+.menu-items{
+  cursor: pointer;
+}
+
+.menu-items:hover {
+  transform: scale(1.05);
+  transition: 0.3s;
+}

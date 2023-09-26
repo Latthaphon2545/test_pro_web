@@ -1,0 +1,170 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+
+* {
+  margin: 3px;
+  padding: 1px;
+  font-family: "Nunito", sans-serif;
+}
+
+.top-container {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 3vw;
+  font-weight: 700;
+  color: #ea5b1e;
+}
+
+/* search bar */
+.search-bar {
+  display: flex;
+  width: 30%;
+  padding: 5px;
+}
+
+.type-search {
+  font-size: 1.5vw;
+  padding: 5px;
+  border: none;
+  width: 100%;
+  outline: none;
+  border-radius: 35px;
+  background-color: #d9d9d9;
+  transition: 0.3s;
+}
+
+.type-search:focus {
+  border: 1px solid #ea5b1e;
+}
+/* search-bar */
+
+/* open/close */
+.open-close {
+  width: 10%; /* Adjust the width as needed */
+  height: 50%; /* Adjust the height as needed */
+  background-color: green; /* Initially red */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Text color */
+}
+
+.open-close:hover {
+  background-color: red; /* Adjust the hover color as needed */
+}
+
+#button-text {
+  font-size: 2vw; /* Adjust the font size as needed */
+}
+/* open/close */
+
+.main-container {
+  background-color: #d9d9d9;
+}
+
+/* category */
+nav.category {
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+}
+
+.nav-content {
+  display: flex;
+  overflow-x: auto;
+  gap: 2rem;
+  padding: 0;
+}
+
+nav ul {
+  transition: all 0.4s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 15px;
+  white-space: nowrap;
+  transition: all 200ms;
+}
+
+nav ul li a:hover {
+  color: #ea5b1e;
+  border-bottom: 1px solid #ea5b1e;
+}
+
+nav ul li a.active {
+  color: #ea5b1e;
+  border-bottom: 1px solid #ea5b1e;
+}
+/* category */
+
+/* edit-button */
+.edit-button {
+  background-color: #ea5b1e;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #ff7c4d; /* Adjust the hover color as needed */
+}
+/* edit-button */
+
+/* menu */
+.menu-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.menu-items {
+  font-size: 20px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: auto;
+}
+
+.menu-img {
+  width: 100%;
+  height: 60%;
+  object-fit: cover;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  box-shadow: #85838a 4px 4px 10px;
+}
+
+/* footer */
+.footer a i{
+  padding: 10px;
+  font-size: 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+}
