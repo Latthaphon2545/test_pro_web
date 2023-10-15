@@ -4,8 +4,9 @@
         <meta charset="utf-8">
         <title>Take away or dine in</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" type="text/css" href="/styles/take_or_dine.css">
-        <script src="/script/take_dine.js"></script>
+        <link rel="stylesheet" type="text/css" href="styles/take_or_dine.css">
+        <!-- socket.io -->
+        <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
     </head>
 
     <body>
@@ -30,6 +31,67 @@
         <div class="send" onclick="send_take_dinein()">
             <h3>SEND</h3>
         </div>
-        
     </body>
+
+    <script>
+        function takeaway_click(P) {
+        var takeaway_beforeclick = document.getElementsByClassName("take-away");
+        var takeaway_afterclick = document.getElementsByClassName("take-away-afterclick");
+        var input_name = document.getElementsByClassName("name");
+        
+        var dineinVisible = document.getElementsByClassName("dine-in-afterclick")[0].style.display !== "none";
+
+        if (P == 1 && !dineinVisible) {
+            takeaway_beforeclick[0].style.display = "none";
+            takeaway_afterclick[0].style.display = "";
+            input_name[0].focus();
+        }
+        else if (P == 2) {
+            takeaway_beforeclick[0].style.display = "";
+            takeaway_afterclick[0].style.display = "none";
+            input_name[0].value = "";
+        }
+    }
+
+    function dinein_click(P) {
+        var dinein_beforeclick = document.getElementsByClassName("dine-in");
+        var dinein_afterclick = document.getElementsByClassName("dine-in-afterclick");
+        var input_table = document.getElementsByClassName("table");
+
+        // Check if the takeaway_afterclick elements are not visible
+        var takeawayVisible = document.getElementsByClassName("take-away-afterclick")[0].style.display !== "none";
+        
+        if (P == 1 && !takeawayVisible) {
+            dinein_beforeclick[0].style.display = "none";
+            dinein_afterclick[0].style.display = "";
+            input_table[0].focus();
+        } else if (P == 2) {
+            dinein_beforeclick[0].style.display = "";
+            dinein_afterclick[0].style.display = "none";
+            input_table[0].value = "";
+        }
+    }
+
+    const socket = io.connect('http://localhost:8000');
+    function send_take_dinein(){
+        var input_name = document.getElementsByClassName("name");
+        var input_table = document.getElementsByClassName("table");
+        if(input_name[0].value != "" && input_table[0].value != ""){
+            alert("Please enter your name or table number");
+        }
+        else {
+            if(input_name[0].value != ""){
+                localStorage.setItem("cus", input_name[0].value);
+            }
+            else if(input_table[0].value != ""){
+                localStorage.setItem("cus", input_table[0].value);
+            }
+        }
+
+        alert("Success");
+        window.location.href = "http://localhost:8000/menu";
+    }
+
+
+    </script>
 </html>

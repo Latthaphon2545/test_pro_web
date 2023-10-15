@@ -80,6 +80,17 @@ h1 {
   text-align: center;
 }
 
+.customer-info {
+  display: flex;
+  font-size: 3vw;
+  font-weight: 900;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px;
+  color: #ea5b1e;
+}
+
 /* ส่วนของ category */
 nav.category {
   background-color: white;
@@ -162,3 +173,4 @@ nav ul li a.active {
   transform: scale(1.05);
   transition: 0.3s;
 }
+
