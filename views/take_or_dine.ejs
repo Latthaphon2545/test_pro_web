@@ -72,7 +72,6 @@
         }
     }
 
-    const socket = io.connect('http://localhost:8000');
     function send_take_dinein(){
         var input_name = document.getElementsByClassName("name");
         var input_table = document.getElementsByClassName("table");
@@ -89,7 +88,7 @@
         }
 
         alert("Success");
-        window.location.href = "http://localhost:8000/menu";
+        window.location.href = "https://hmv8210m-8000.asse.devtunnels.ms/menu";
     }
 
 

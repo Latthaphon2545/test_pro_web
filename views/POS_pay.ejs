@@ -54,14 +54,14 @@
       <div class="footer">
         <!-- order-sum icon -->
         <a
-          href="http://localhost:8000/restaurant_done"
+          href="/restaurant_done"
           target="_blank"
         >
           <i class="fas fa-list" style="color: #000000"></i>
         </a>
         <!-- cash icon -->
         <a
-          href="http://localhost:8000/restaurant_pay"
+          href="/restaurant_pay"
           target="_blank"
         >
           <i class="fa-solid fa-cash-register" style="color: #000000"></i>
@@ -81,7 +81,7 @@
       orders_pay = JSON.parse(localStorage.getItem("orders_pay"));
     }
 
-    const socket = io.connect('http://localhost:8000');
+    const socket = io.connect('https://hmv8210m-8000.asse.devtunnels.ms');
     const show = document.querySelector('.cover-box');
 
     socket.on('pay', (doneOrder) => {

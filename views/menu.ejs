@@ -128,7 +128,7 @@
   </body>
 
   <script>
-      const socket = io.connect('http://localhost:8000');
+      const socket = io.connect('https://hmv8210m-8000.asse.devtunnels.ms');
       const customerNameElement = document.getElementById('customer-name');
       // check if customer name is not number
       const cus_localStorage = localStorage.getItem("cus");
@@ -143,7 +143,7 @@
                         {
                           id: 1,
                           img: 'images/Thai-Omelette-HP-191008.jpg',
-                          name: 'Omelet',
+                          name: 'ไข่เจียว',
                           price: 50,
                           type: 'fry',
                           AddOn: ['Egg', 'Onion', 'Tomato', 'Chili', 'Salt', 'Pepper', 'Rice']
