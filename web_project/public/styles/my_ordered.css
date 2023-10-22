@@ -12,6 +12,8 @@ h1{
 
 .ordered-container {
     display: grid;
+    max-height: 570px;
+    overflow-y: scroll;
 }
 
 .ordered-list{
@@ -20,10 +22,7 @@ h1{
     align-items: center;
     text-align: left;
     margin: 0px;
-    /* border: 1px solid black; */
-    
-    /* padding: 0%; */
-    /* border: 1px solid black; อย่าลืมลบเด้อ */
+    justify-content: space-between;
 }
 
 .detail{

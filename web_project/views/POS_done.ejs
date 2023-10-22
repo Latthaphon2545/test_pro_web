@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>POS Done</title>
+    <title>ร้านค้า(รับรายการอาหาร)</title>
     <link rel="stylesheet" type="text/css" href="styles/POS_done.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <!-- socket.io -->
@@ -11,17 +11,7 @@
   </head>
   <body>
     <div class="top-container">
-      <h1>Restaurant's name</h1>
-      <!--search bar-->
-      <div class="search-bar">
-        <input
-          type="text"
-          class="type-search"
-          placeholder="SEARCH"
-          id="tet_search"
-        />
-      </div>
-      <!--search bar-->
+      <h1 style="color: green;">เจ้าจักร ข้าวต้มโต้รุ่ง</h1>
     </div>
 
     <div class="main-container">
@@ -29,9 +19,8 @@
       <div class="cover-box" id="done">
         <!-- Existing order containers will be populated here -->
       </div>
-
+      <!--  -->
     </div>
-    <!-- "Done" and "Pay" sections -->
 
     <div class="footer">
       <!-- Order-sum icon to display "Done" section -->
@@ -63,7 +52,7 @@
         // console.log('Socket is connected' + orders.length);
         const orderCount = orders.length + 1; // Increment order count
 
-        const orderType = !isNaN(customer[4]) ? 'Dine in' : 'Take away';
+        const orderType = !isNaN(customer[4]) ? 'ทานที่ร้าน' : 'สั่งกลับบ้าน';
 
         // Capture the current time in 24-hour format
         const now = new Date();
@@ -77,8 +66,8 @@
             <div class="show">
               <div class="table-no">
                 <h1>Order No.${orderCount}</h1>
+                <p>เวลา: ${currentTime}</p>
               </div>
-              <p>Order Time: ${currentTime}</p>
               <div class="customer-detail">
                 <div class="customer-detail-left">
                   <p>${customer}</p>
@@ -87,7 +76,8 @@
                   <p>${orderType}</p>
                 </div>
               </div>
-              <p>-----------------------------------------------</p>
+              <p>----------------------------------------------</p>
+              <div class="scrollMenu">
             `;
 
         const menuItems = cart
@@ -110,8 +100,9 @@
           ).join('');
 
         const doneButton = `
+      </div>
           <div class="done-container" onclick="remove(${orderCount - 1})">
-            <h2 class="done">Done</h2>
+            <h2 class="done">เสร็จสิ้น</h2>
           </div>
         </div>
       </div>
@@ -133,6 +124,9 @@
       });
 
       function remove(orderIndex) {
+        // check confirm -> 
+        if(!confirm('คุณทำออเดอร์เสร็จแล้ว?')) return;
+        // --------------------------------------
         socket.emit('done', orders[orderIndex]);
         // Remove the order from the orders array
         orders.splice(orderIndex, 1);
@@ -142,7 +136,11 @@
 
         // Remove the order container from the show element
         const orderContainers = document.querySelectorAll('.sum-container');
+        console.log(orderContainers[orderIndex]);
         orderContainers[orderIndex].remove();
+
+        // refresh page
+        window.location.reload();
       }
 
       // Function to initialize the order display
@@ -156,8 +154,8 @@
               <div class="show">
                 <div class="table-no">
                   <h1>Order No.${i + 1}</h1>
+                  <p>เวลา: ${order.currentTime}</p>
                 </div>
-                <p>Order Time: ${order.currentTime}</p>
                 <div class="customer-detail">
                   <div class "customer-detail-left">
                     <p>${order.customer}</p>
@@ -166,32 +164,34 @@
                     <p>${order.orderType}</p>
                   </div>
                 </div>
-                <p>-----------------------------------------------</p>
+                <p>----------------------------------------------</p>
+                <div class="scrollMenu">
               `;
 
           const menuItems = order.cart
             .map(
               (item) => `
-              <div class="menubox">
-                <div class="left">
-                  <div class="menu-name">
-                    <p>${item.name}</p>
+                <div class="menubox">
+                  <div class="left">
+                    <div class="menu-name">
+                      <p>${item.name}</p>
+                    </div>
+                    <div class="add-on">
+                      <p>${item.addon}</p>
+                    </div>
                   </div>
-                  <div class="add-on">
-                    <p>${item.addon}</p>
+                  <div class="right">
+                    <p>${item.count}</p>
                   </div>
                 </div>
-                <div class="right">
-                  <p>${item.count}</p>
-                </div>
-              </div>
             `
             )
             .join('');
 
           const doneButton = `
+            </div>
             <div class="done-container" onclick="remove(${i})">
-              <h2 class="done">Done</h2>
+              <h2 class="done">เสร็จสิ้น</h2>
             </div>
           </div>
           </div>

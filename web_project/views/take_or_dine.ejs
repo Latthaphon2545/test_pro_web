@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Take away or dine in</title>
+        <title>สั่งกลับบ้านหรือทานที่ร้าน</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="styles/take_or_dine.css">
         <!-- socket.io -->
@@ -11,25 +11,25 @@
 
     <body>
         <div class="take-away" onclick="takeaway_click(1)">
-            <h2>Take Away</h2>
+            <h2>สั่งกลับบ้าน</h2>
         </div>
 
         <div class="take-away-afterclick" style="display: none;" onclick="takeaway_click(2)">
-            <h2>Take Away</h2>
+            <h2>สั่งกลับบ้าน</h2>
             <input type="text" class="name" name="firstname" placeholder="Your name">
         </div>
 
         <div class="dine-in" onclick="dinein_click(1)">
-            <h2>Dine In</h2>
+            <h2>ทานที่ร้าน</h2>
         </div>
 
         <div class="dine-in-afterclick" style="display: none;" onclick="dinein_click(2)">
-            <h2>Dine In</h2>
+            <h2>ทานที่ร้าน</h2>
             <input type="text" class="table" placeholder="Table No.">
         </div>
 
         <div class="send" onclick="send_take_dinein()">
-            <h3>SEND</h3>
+            <h3>ต่อไป</h3>
         </div>
     </body>
 
@@ -72,25 +72,32 @@
         }
     }
 
-    function send_take_dinein(){
-        var input_name = document.getElementsByClassName("name");
-        var input_table = document.getElementsByClassName("table");
-        if(input_name[0].value != "" && input_table[0].value != ""){
-            alert("Please enter your name or table number");
-        }
-        else {
-            if(input_name[0].value != ""){
-                localStorage.setItem("cus", input_name[0].value);
-            }
-            else if(input_table[0].value != ""){
-                localStorage.setItem("cus", input_table[0].value);
-            }
-        }
+    function send_take_dinein() {
+        var input_name = document.getElementsByClassName("name")[0];
+        var input_table = document.getElementsByClassName("table")[0];
+        var nameRegex = /^[A-Za-zก-๏\s]+$/; // This regex allows both Thai and English letters
+        var tableRegex = /^[0-9]+$/; // This regex allows only numbers
 
-        alert("Success");
-        window.location.href = "https://hmv8210m-8000.asse.devtunnels.ms/menu";
+        var nameValue = input_name.value.trim();
+        var tableValue = input_table.value.trim();
+
+        if (nameValue === "" && tableValue === "") {
+            alert("กรุณากรอกชื่อหรือหมายเลขโต๊ะของคุณ");
+        } else if (nameValue !== "" && !nameRegex.test(nameValue)) {
+            alert("ชื่อต้องมีตัวอักษรไทยและอังกฤษเท่านั้น");
+        } else if (tableValue !== "" && !tableRegex.test(tableValue)) {
+            alert("หมายเลขโต๊ะต้องประกอบด้วยตัวเลขเท่านั้น");
+        } else {
+            if (nameValue !== "") {
+                localStorage.setItem("cus", nameValue);
+            } else if (tableValue !== "") {
+                localStorage.setItem("cus", tableValue);
+            }
+
+            alert("Success");
+            window.location.href = "/menu";
+        }
     }
-
 
     </script>
 </html>

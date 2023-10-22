@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const Product = require('../models/products');
 
-router.get('/menu', (req, res) => {
-    res.render('menu');
+
+
+router.get('/menu', async (req, res) => {
+    Product.find({}).then((products) => {
+        res.render('menu', { products: products })
+    }).catch(err => {console.log(err);});
 });
 
 router.get('/Restaurant_done', (req, res) => {
