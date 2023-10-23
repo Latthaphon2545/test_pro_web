@@ -1,0 +1,162 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+
+* {
+  margin: 3px;
+  padding: 1px;
+  font-family: "Nunito", sans-serif;
+}
+
+.top-container {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 3vw;
+  font-weight: 700;
+  color: #ea5b1e;
+}
+
+.main-container {
+    background-color: #D9D9D9;
+}
+
+.sum-container{
+    background-color: white;
+    width: 344px;
+    height: 580px;
+    margin: 8px;
+    border-radius: 20px;
+}
+
+.table-no h1{
+    font-size: 25px;
+}
+
+.customer-detail{
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.customer-detail-left{
+    display: flex;
+    font-size: 12px;
+}
+
+.menubox{
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    min-width: 308px;
+}
+
+.menu-name{
+  font-weight:normal;
+}
+
+.add-on{
+    font-size: 10px;
+    margin-top: -10px;
+}
+
+.left{
+    justify-content: center;
+    margin: -8px 1px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pay{
+    background-color: #ea5b1e;
+    color: white;
+    padding: 15px ;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.cover-box{
+    display: flex;
+    height: 620px;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+}
+
+.total-container{
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+}
+
+.total-container h2{
+    font-size: 25px;
+}
+
+.footer a i{
+  padding: 10px;
+  font-size: 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.footer{
+  display: flex;
+  justify-content: space-around;
+}
+
+.add {
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+}
+
+button#back, button#add-button {
+  background-color: #ea5b1e;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.add-item ul {
+  padding: 0;
+}
+
+.add-item li {
+  list-style-type: none;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.add-item a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.add-item input[type="text"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.scrollMenu{
+  /* background-color: #fffb00; */
+  height: 280px;
+  overflow-y: scroll;
+}

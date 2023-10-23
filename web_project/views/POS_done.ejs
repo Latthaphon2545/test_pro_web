@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ร้านค้า(รับรายการอาหาร)</title>
+    <link rel="stylesheet" type="text/css" href="styles/POS_done.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- socket.io -->
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="top-container">
+      <h1 style="color: green;">เจ้าจักร ข้าวต้มโต้รุ่ง</h1>
+    </div>
+
+    <div class="main-container">
+      <!-- "Done" section (Initially visible) -->
+      <div class="cover-box" id="done">
+        <!-- Existing order containers will be populated here -->
+      </div>
+      <!--  -->
+    </div>
+
+    <div class="footer">
+      <!-- Order-sum icon to display "Done" section -->
+      <a href="/restaurant_done" target="_blank">
+        <i class="fas fa-list" style="color: #000000"></i>
+      </a>
+      <!-- Cash icon to display "Pay" section -->
+      <a href="/restaurant_pay" target="_blank">
+        <i class="fa-solid fa-cash-register" style="color: #000000"></i>
+      </a>
+    </div>
+
+    <script>
+      // Initialize an array to store order data
+      let orders = [];
+
+      // Load orders from local storage when the page loads
+      if (localStorage.getItem('orders')) {
+        orders = JSON.parse(localStorage.getItem('orders'));
+      }
+      
+
+      const socket = io.connect('https://hmv8210m-8000.asse.devtunnels.ms');
+      const show = document.querySelector('.cover-box');
+      
+      socket.on('shop', (response) => {
+        const customer = response.customer;
+        const cart = response.cart;
+        // console.log('Socket is connected' + orders.length);
+        const orderCount = orders.length + 1; // Increment order count
+
+        const orderType = !isNaN(customer[4]) ? 'ทานที่ร้าน' : 'สั่งกลับบ้าน';
+
+        // Capture the current time in 24-hour format
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        const currentTime = `${hours}:${minutes}:${seconds}`;
+
+        const orderHeader = `
+          <div class="sum-container">
+            <div class="show">
+              <div class="table-no">
+                <h1>Order No.${orderCount}</h1>
+                <p>เวลา: ${currentTime}</p>
+              </div>
+              <div class="customer-detail">
+                <div class="customer-detail-left">
+                  <p>${customer}</p>
+                </div>
+                <div class="take-or-dine">
+                  <p>${orderType}</p>
+                </div>
+              </div>
+              <p>----------------------------------------------</p>
+              <div class="scrollMenu">
+            `;
+
+        const menuItems = cart
+          .map(
+            (item) => `
+            <div class="menubox">
+              <div class="left">
+                <div class="menu-name">
+                  <p>${item.name}</p>
+                </div>
+                <div class="add-on">
+                  <p>${item.addon}</p>
+                </div>
+              </div>
+              <div class="right">
+                <p>${item.count}</p>
+              </div>
+            </div>
+          `
+          ).join('');
+
+        const doneButton = `
+      </div>
+          <div class="done-container" onclick="remove(${orderCount - 1})">
+            <h2 class="done">เสร็จสิ้น</h2>
+          </div>
+        </div>
+      </div>
+      `;
+
+        // Append the new order container to the show element
+        show.innerHTML += orderHeader + menuItems + doneButton;
+
+        // Push the order data into the orders array, including the current time
+        orders.push({
+          customer: customer,
+          cart: cart,
+          orderType: orderType,
+          currentTime: currentTime,
+        });
+
+        // Update local storage with the new order data
+        localStorage.setItem('orders', JSON.stringify(orders));
+      });
+
+      function remove(orderIndex) {
+        // check confirm -> 
+        if(!confirm('คุณทำออเดอร์เสร็จแล้ว?')) return;
+        // --------------------------------------
+        socket.emit('done', orders[orderIndex]);
+        // Remove the order from the orders array
+        orders.splice(orderIndex, 1);
+
+        // Update local storage with the modified orders array
+        localStorage.setItem('orders', JSON.stringify(orders));
+
+        // Remove the order container from the show element
+        const orderContainers = document.querySelectorAll('.sum-container');
+        console.log(orderContainers[orderIndex]);
+        orderContainers[orderIndex].remove();
+
+        // refresh page
+        window.location.reload();
+      }
+
+      // Function to initialize the order display
+      function initializeOrderDisplay() {
+        for (let i = 0; i < orders.length; i++) {
+          const order = orders[i];
+
+          // Create and display order containers based on order data
+          const orderHeader = `
+            <div class="sum-container">
+              <div class="show">
+                <div class="table-no">
+                  <h1>Order No.${i + 1}</h1>
+                  <p>เวลา: ${order.currentTime}</p>
+                </div>
+                <div class="customer-detail">
+                  <div class "customer-detail-left">
+                    <p>${order.customer}</p>
+                  </div>
+                  <div class="take-or-dine">
+                    <p>${order.orderType}</p>
+                  </div>
+                </div>
+                <p>----------------------------------------------</p>
+                <div class="scrollMenu">
+              `;
+
+          const menuItems = order.cart
+            .map(
+              (item) => `
+                <div class="menubox">
+                  <div class="left">
+                    <div class="menu-name">
+                      <p>${item.name}</p>
+                    </div>
+                    <div class="add-on">
+                      <p>${item.addon}</p>
+                    </div>
+                  </div>
+                  <div class="right">
+                    <p>${item.count}</p>
+                  </div>
+                </div>
+            `
+            )
+            .join('');
+
+          const doneButton = `
+            </div>
+            <div class="done-container" onclick="remove(${i})">
+              <h2 class="done">เสร็จสิ้น</h2>
+            </div>
+          </div>
+          </div>
+          `;
+
+          // Append the order container to the show element
+          show.innerHTML += orderHeader + menuItems + doneButton;
+        }
+      }
+      // Call the function to initialize the order display when the page loads
+      window.onload = initializeOrderDisplay;
+    </script>
+  </body>
+</html>

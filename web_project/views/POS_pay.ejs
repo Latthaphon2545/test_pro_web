@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ร้านค้า(จ่ายเงิน)</title>
+    <link rel="stylesheet" type="text/css" href="styles/POS_pay.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <!-- socket.io -->
+    <script
+      src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+      integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/receipt.css">
+  </head>
+  <body>
+    <div class="res">
+      <div class="top-container">
+        <h1>เจ้าจักร ข้าวต้มโต้รุ่ง</h1>
+      </div>
+
+      <div class="main-container">
+        <!--ordered sum-->
+        <div class="cover-box">
+          <!-- Existing order containers will be populated here -->
+        </div>
+        <!--Ordered sum-->
+      </div>
+
+      <div class="footer">
+        <!-- order-sum icon -->
+        <a href="/restaurant_done" target="_blank">
+          <i class="fas fa-list" style="color: #000000"></i>
+        </a>
+        <!-- cash icon -->
+        <a href="/restaurant_pay" target="_blank">
+          <i class="fa-solid fa-cash-register" style="color: #000000"></i>
+        </a>
+      </div>
+  </div>
+
+    <div class="receipt" style="display: none;">
+     <!--  -->
+    </div>
+    <div class="addOther" style="display: none;">
+      <!--  -->
+     </div>
+  </body>
+
+  <script>
+    let orders_pay = [];
+
+    if (localStorage.getItem("orders_pay")) {
+      orders_pay = JSON.parse(localStorage.getItem("orders_pay"));
+    }
+
+    const socket = io.connect('https://hmv8210m-8000.asse.devtunnels.ms');
+    const show = document.querySelector('.cover-box');
+
+    socket.on('pay', (doneOrder) => {
+      const customer = doneOrder.customer;
+      const cart = doneOrder.cart;
+      const orderType = doneOrder.orderType;
+      const orderTime = doneOrder.currentTime;
+      const orderCount = orders_pay.length + 1;
+      const total_price = cart.reduce(
+        (total, item) => total + item.count * item.price,
+        0
+      );
+
+      const orderHeader = `<div class="sum-container">
+            <div class="table-no">
+                <h1>Order No.${orderCount}</h1>
+                <p>เวลา: ${orderTime}</p>
+            </div>
+            <div class="customer-detail">
+                <div class="customer-detail-left">
+                  <p>${customer}</p>
+                </div>
+                <div class="take-or-dine">
+                  <p>${orderType}</p>
+                </div>
+            </div>
+            <p>----------------------------------------------</p>
+            <div class="scrollMenu">`;
+
+      const menuItems = cart
+        .map(
+          (item) => `<div class="menubox">
+                <div class="left">
+                    <div class="menu-name">
+                        <p>${item.name}</p>
+                    </div>
+                    <div class="add-on">
+                        <p>${item.addon}</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <p>${(item.count * item.price).toFixed(2)}</p>
+                </div>
+            </div>`
+        )
+        .join('');
+
+      const doneButton = `</div>
+      <div class="total-container">
+            <div class="total">
+                <h2>ราคาทั้งหมด</h2>
+            </div>
+            <div class="total-price">
+                <h2>${total_price.toFixed(2)}</h2>
+            </div>
+            <a onclick="showAdd(${orderCount - 1})">
+              <i class="fa-solid fa-plus" style="color: #000000"></i>
+            </a>
+        </div>
+        <div class="pay-container" onclick="pay(${orderCount - 1})">
+            <h2 class="pay">จ่าย</h2>
+        </div>
+        </div>
+        </div>`;
+
+      show.innerHTML += orderHeader + menuItems + doneButton;
+
+      orders_pay.push(doneOrder);
+
+      localStorage.setItem('orders_pay', JSON.stringify(orders_pay));
+    });
+
+    function pay(orderIndex) {
+      receipt_click(orders_pay[orderIndex]);
+      orders_pay.splice(orderIndex, 1);
+      // Update local storage with the new order data
+      localStorage.setItem('orders_pay', JSON.stringify(orders_pay));
+
+      // Update in server with the modified orders array
+      socket.emit('pay', orders_pay);
+
+      const orderContainers = document.querySelectorAll('.sum-container');
+      orderContainers[orderIndex].remove();
+      // refresh page
+    }
+
+    function initializeOrderDisplay() {
+      for (let i = 0; i < orders_pay.length; i++) {
+        const order = orders_pay[i];
+
+        const total_price = order.cart.reduce(
+          (total, item) => total + item.count * item.price,
+          0
+        );
+
+        const orderHeader = `<div class="sum-container">
+            <div class="table-no">
+                <h1 id="index">Order No.${i + 1}</h1>
+                <p>เวลา: ${order.currentTime}</p>
+            </div>
+            <div class="customer-detail">
+                <div class="customer-detail-left">
+                  <p>${order.customer}</p>
+                </div>
+                <div class="take-or-dine">
+                  <p>${order.orderType}</p>
+                </div>
+            </div>
+            <p>----------------------------------------------</p>
+            <div class="scrollMenu">
+              `;
+
+        const menuItems = order.cart
+          .map(
+            (item) => `<div class="menubox">
+                <div class="left">
+                    <div class="menu-name">
+                        <p>${item.name}</p>
+                    </div>
+                    <div class="add-on">
+                        <p>${item.addon}</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <p>${numberWithCommas((item.count * item.price).toFixed(2))}</p>
+                </div>
+            </div>`
+          )
+          .join('');
+
+        const doneButton = `</div>
+        <div class="total-container">
+            <div class="total">
+                <h2>ราคาทั้งหมด</h2>
+            </div>
+            <div class="total-price">
+                <h2>${numberWithCommas(total_price.toFixed(2))}</h2>
+            </div>
+            <a onclick="showAdd(${i})">
+              <i class="fa-solid fa-plus" style="color: #000000"></i>
+            </a>
+        </div>
+        <div class="pay-container" onclick="pay(${i})">
+            <h2 class="pay">จ่าย</h2>
+        </div>
+        </div>
+        </div>`;
+
+        
+
+        show.innerHTML += orderHeader + menuItems + doneButton;
+      }
+    }
+
+    window.onload = initializeOrderDisplay;
+
+    function numberWithCommas(x) {
+        x = x.toString();
+        var pattern = /(-?\d+)(\d{3})/;
+        while (pattern.test(x))
+            x = x.replace(pattern, "$1,$2");
+        return x;
+      }
+
+    function receipt_click(orders_pay_now) {
+      const res = document.querySelector('.res');
+      res.style.display = 'none';
+      
+      const receipt = document.querySelector('.receipt');
+      receipt.style.width = 'max-content';
+      // Set margin to center
+      receipt.style.margin = 'auto';
+      receipt.style.display = '';
+      
+
+      const currentDate = new Date();
+      // Date format: DD/MM/YYYY
+      const day = currentDate.getDate().toString().padStart(2, '0');
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+      const year = currentDate.getFullYear();
+      const date = `${day}/${month}/${year}`;
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      const currentTime = `${hours}:${minutes}:${seconds}`;
+      const cart = orders_pay_now.cart;
+      const receiptHeader = `
+          <div class="head-container">
+              <h2>ใบเสร็จ</h2>
+          </div>
+          <div class="container"> 
+              <div class="first-line">
+                  <div class="rest-name">
+                      <p>เจ้าจักร ข้าวต้มโต้รุ่ง</p>
+                  </div>
+                  <div class="date">
+                      <p>${date}</p>
+                  </div>
+                  <div class="time">
+                      <p>${currentTime}</p>
+                  </div>
+              </div>
+              <p class="line">-------------------------------------------------------------------------</p>
+      `;
+
+      const menuItems = cart
+          .map(
+              (item) => `
+                  <div class="order-container">
+                      <div class="second-line">
+                          <div class="leftRe">
+                              <div class="piece">
+                                  <p>${item.count}X</p>
+                              </div>
+                              <div class="food-name">
+                                  <p>${item.name}</p>
+                              </div>   
+                          </div>
+                          <div class="price">
+                              <p>${numberWithCommas(item.count * item.price)}</p>
+                          </div>    
+                      </div>
+                  </div>
+              `
+          )
+          .join('');
+
+      // Calculate the total price
+      totalPrice = cart.reduce((total, item) => total + item.count * item.price, 0);
+      console.log(totalPrice);
+
+      const last = `
+          <p class="line">-------------------------------------------------------------------------</p>
+          <div class="fourth-line">
+              <div class="sum">
+                  <p class="total">ราคาทั้งหมด</p>
+              </div>
+              <div class="total-price">
+                  <p id="amount">${numberWithCommas(totalPrice)}</p>
+              </div>
+          </div>
+          <p class="line">-------------------------------------------------------------------------</p>
+          <div class="qr-container">
+              <div class="qr-pic">
+                  <img src="" width="225" id="imgqr">
+              </div>
+              <p class="line">*************************** THANK YOU! ***************************</p>
+          </div>
+          <h1 style="margin-left: 125px;" id="Close">Close</h1>
+      `;
+
+      // Combine the receipt elements
+      const receiptContent = receiptHeader + menuItems + last;
+
+      // Set the HTML content of the receipt container
+      receipt.innerHTML = receiptContent;
+      genQR(totalPrice);
+
+      // Close the receipt when clicking on the "Close" element
+      const close = document.querySelector('#Close');
+      close.addEventListener('click', () => {
+          if(!confirm('Are you done?')) return;
+          receipt.style.display = 'none';
+          res.style.display = '';
+          window.location.reload();
+      });      
+  }
+
+    function genQR(amount_cus) {
+            $.ajax({
+                method: 'post',
+                url: 'https://hmv8210m-8000.asse.devtunnels.ms/generateQR',
+                data: {
+                    amount: amount_cus
+                },
+                success: function(response) {
+                    // console.log('good', response)
+                    console.log(amount_cus)
+                    $("#imgqr").attr('src', response.Result)
+                }, error: function(err) {
+                    console.log('bad', err)
+                }
+            })
+        }
+    
+    function addToCart(orders_pay_now) {
+      const res = document.querySelector('.res');
+      const addOther = document.querySelector('.addOther');
+      if(!confirm('Are you done?')) return;
+      const foodtext = document.querySelector('.add-food-text').value;
+      const food = document.querySelector('.add-food').value;
+      const rice = document.querySelector('.add-rice').value;
+      const water = document.querySelector('.add-water').value;
+      const ice = document.querySelector('.add-ice').value;
+      const bear = document.querySelector('.add-bear').value;
+      const alcohol = document.querySelector('.add-alcohol').value;
+      const soda = document.querySelector('.add-soda').value;
+      const reduce = document.querySelector('.add-Reduce').value;
+      // convert string to float
+      const Food = parseFloat(food);
+      const Rice = parseFloat(rice);
+      const Water = parseFloat(water);
+      const Ice = parseFloat(ice);
+      const Bear = parseFloat(bear);
+      const Alcohol = parseFloat(alcohol);
+      const Soda = parseFloat(soda);
+      const Reduce = parseFloat(reduce);
+      if (foodtext !== '' && food !== '') {
+        orders_pay_now.cart.push({
+          name: foodtext,
+          price: Food, // Ensure that price is a number
+          count: 1,
+          addon: '',
+        });
+      }
+      if (rice !== '' && rice !== 0) {
+        orders_pay_now.cart.push({
+          name: 'ข้าว',
+          price: Rice, // Ensure that price is a number
+          count: 1,
+          addon: '',
+        });
+      }
+      if (water !== '' && water !== 0) {
+        orders_pay_now.cart.push({
+          name: 'น้ำ',
+          price: Water, // Ensure that price is a number
+          count: 1,
+          addon: '',
+        });
+      }
+      if (ice !== '' && ice !== 0) {
+        orders_pay_now.cart.push({
+          name: 'น้ำแข็ง',
+          price: Ice, // Ensure that price is a number
+          count: 1,
+          addon: '',
+        });
+      }
+      if (bear !== '' && bear !== 0) {
+        orders_pay_now.cart.push({
+          name: 'เบียร์',
+          price: Bear, // Ensure that price is a number
+          count: 1,
+          addon: '',
+        });
+      }
+      if (alcohol !== '' && alcohol !== 0) {
+        orders_pay_now.cart.push({
+          name: 'เหล้า',
+          price: Alcohol, // Ensure that price is a number
+          count: 1,
+          addon: '',
+        });
+      }
+      if (soda !== '' && soda !== 0) {
+        orders_pay_now.cart.push({
+          name: 'โซดา',
+          price: Soda, // Ensure that price is a number
+          count: 1,
+          addon: '',
+        });
+      }
+      if (reduce !== '' && reduce !== 0) {
+        orders_pay_now.cart.push({
+          name: 'ส่วนลด',
+          price: -Reduce, // Ensure that price is a number
+          count: 1,
+          addon: '',
+        });
+      }
+      addOther.style.display = 'none';
+      res.style.opacity = '1';
+      console.log(orders_pay_now);
+      // Update local storage with the new order data
+      localStorage.setItem('orders_pay', JSON.stringify(orders_pay));
+      window.location.reload();
+    };
+  
+    function showAdd(orderIndex){
+      const res = document.querySelector('.res');
+      // res is transparent
+      res.style.opacity = '0.1';
+
+      const addOther = document.querySelector('.addOther');
+      addOther.style.width = 'max-content';
+      // Set margin to center
+      addOther.style.margin = 'auto';
+      addOther.style.display = '';
+      // show center of the screen
+      addOther.style.top = '50%';
+      addOther.style.left = '50%';
+      addOther.style.transform = 'translate(-50%, -50%)';
+      addOther.style.position = 'absolute';
+      addOther.style.backgroundColor = 'white';
+      const addOtherContent = `<div class="add">
+                                <div class="add-item">
+                                  <ul style="list-style-type: none;">
+                                    <li> <a> เพิ่มอาหาร <input type="text" class="add-food-text" placeholder="ชื่อ"> </a> <input type="text" class="add-food" placeholder="ราคา"></li>
+                                    <li> <a> ข้าว <input type="text" class="add-rice" placeholder="ราคา"> </a> </li>
+                                    <li> <a> น้ำ <input type="text" class="add-water" placeholder="ราคา"> </a> </li>
+                                    <li> <a> น้ำแข็ง <input type="text" class="add-ice" placeholder="ราคา"> </a> </li>
+                                    <li> <a> เบียร์ <input type="text" class="add-bear" placeholder="ราคา"> </a> </li>
+                                    <li> <a> เหล้า <input type="text" class="add-alcohol" placeholder="ราคา"> </a> </li>
+                                    <li> <a> โซดา <input type="text" class="add-soda" placeholder="ราคา"> </a> </li>
+                                    <li> <a> ส่วนลด <input type="text" class="add-Reduce" placeholder="ราคา"> </a> </li>
+                                  </ul>
+                                </div>
+                                <button id="back">กลับ</button>
+                                <button id="add-button">เพิ่ม</button>
+                              </div>
+                            `;
+      addOther.innerHTML = addOtherContent;
+
+      const addButton = document.querySelector('#add-button');
+      addButton.addEventListener('click', () => {
+        addToCart(orders_pay[orderIndex]);
+      });
+
+      // Close the receipt when clicking on the "Close" element
+      const back = document.querySelector('#back');
+      back.addEventListener('click', () => {
+          addOther.style.display = 'none';
+          res.style.opacity = '1';
+      });
+    }
+  </script>
+</html>
